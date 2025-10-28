@@ -1,8 +1,17 @@
 import { useState } from "react";
 import style from "./Controls.module.css";
-
-const Controls = ({ onSend }) => {
+import TextareaAutoSize from "react-textarea-autosize";
+import { useRef } from "react";
+import { useEffect } from "react";
+const Controls = ({ onSend, isDisabled = false }) => {
+    const textareaRef = useRef(null);
     const [content, setContent] = useState("");
+
+    useEffect(() => {
+        if (!isDisabled) {
+            textareaRef.current.focus();
+        }
+    }, [isDisabled]);
 
     const handleContentChange = (e) => {
         setContent(e.target.value);
@@ -16,7 +25,7 @@ const Controls = ({ onSend }) => {
     };
 
     const handleEnterPress = (e) => {
-        if(e.key === "Enter" && !e.shiftKey) {
+        if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             handleContentSend();
         }
@@ -24,7 +33,8 @@ const Controls = ({ onSend }) => {
     return (
         <div className={style.Controls}>
             <div className={style.TextAreaContainer}>
-                <textarea
+                <TextareaAutoSize
+                    ref={textareaRef}
                     className={style.TextArea}
                     placeholder="Type your message here..."
                     name="userMessage"
@@ -32,7 +42,10 @@ const Controls = ({ onSend }) => {
                     value={content}
                     onChange={handleContentChange}
                     onKeyDown={handleEnterPress}
-                ></textarea>
+                    minRows={1}
+                    maxRows={4}
+                    disabled={isDisabled}
+                ></TextareaAutoSize>
             </div>
             <button className={style.Button} onClick={handleContentSend}>
                 <SendIcon />
