@@ -4,6 +4,7 @@ import { useState } from "react";
 import Controls from "./components/Controls/Controls";
 import { Assistant } from "./assistants/googleai";
 import Loader from "./components/Loader/Loader";
+import botLogo from "/bot.png";
 
 const App = () => {
     const assistant = new Assistant();
@@ -66,7 +67,7 @@ const App = () => {
         <div className={styles.App}>
             {isLoading && <Loader />}
             <header className={styles.Header}>
-                <img src="/bot.png" alt="" className={styles.Logo} />
+                <img src={botLogo} alt="" className={styles.Logo} />
                 <h2 className={styles.Title}>Ai chatbot</h2>
             </header>
             <div className={styles.ChatContainer}>
