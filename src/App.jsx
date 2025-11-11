@@ -2,16 +2,30 @@ import styles from "./App.module.css";
 import Chat from "./components/Chat/Chat";
 import { useState } from "react";
 import Controls from "./components/Controls/Controls";
-import { Assistant } from "./assistants/googleai";
+import { Assistant } from "./assistants/openai";
 import Loader from "./components/Loader/Loader";
 
 const App = () => {
     const assistant = new Assistant();
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const[isStreaming, setIsStreaming] = useState(false);
 
     const addMessage = (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
+    };
+
+    const updateLastMessage = (updatedContent) => {
+        setMessages((prevMessages) =>
+            prevMessages.map((message, index) =>
+                index === prevMessages.length - 1
+                    ? {
+                          ...message,
+                          content: `${message.content}${updatedContent}`,
+                      }
+                    : message
+            )
+        );
     };
 
     const handleContentSend = async (content) => {
@@ -22,9 +36,19 @@ const App = () => {
         setIsLoading(true);
 
         try {
-            const result = await assistant.chat(content);
+            const result = assistant.chatStream(content, messages);
+            let isFirstChunk = false;
 
-            addMessage({ content: result, role: "assistant" });
+            for await (const chunk of result) {
+                if (!isFirstChunk) {
+                    isFirstChunk = true;
+                    addMessage({ content: chunk, role: "assistant" });
+                    setIsLoading(false);
+                    setIsStreaming(true);
+                }
+                updateLastMessage(chunk);
+            }
+            setIsStreaming(false);
         } catch (error) {
             console.log(error);
 
@@ -33,8 +57,8 @@ const App = () => {
                     "Sorry i couldn't process your request. Please try again",
                 role: "system",
             });
-        } finally {
             setIsLoading(false);
+            setIsStreaming(false);
         }
     };
 
@@ -48,7 +72,7 @@ const App = () => {
             <div className={styles.ChatContainer}>
                 <Chat messages={messages} />
             </div>
-            <Controls onSend={handleContentSend} isDisabled={isLoading} />
+            <Controls onSend={handleContentSend} isDisabled={isLoading || isStreaming} />
         </div>
     );
 };
