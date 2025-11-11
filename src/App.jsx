@@ -2,7 +2,7 @@ import styles from "./App.module.css";
 import Chat from "./components/Chat/Chat";
 import { useState } from "react";
 import Controls from "./components/Controls/Controls";
-import { Assistant } from "./assistants/openai";
+import { Assistant } from "./assistants/googleai";
 import Loader from "./components/Loader/Loader";
 
 const App = () => {
@@ -36,7 +36,7 @@ const App = () => {
         setIsLoading(true);
 
         try {
-            const result = assistant.chatStream(content, messages);
+            const result = assistant.chatStream(content);
             let isFirstChunk = false;
 
             for await (const chunk of result) {
