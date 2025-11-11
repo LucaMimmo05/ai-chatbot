@@ -10,7 +10,7 @@ const App = () => {
     const assistant = new Assistant();
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const[isStreaming, setIsStreaming] = useState(false);
+    const [isStreaming, setIsStreaming] = useState(false);
 
     const addMessage = (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
@@ -38,12 +38,12 @@ const App = () => {
 
         try {
             const result = assistant.chatStream(content);
-            let isFirstChunk = false;
+            let isFirstChunk = true;
 
             for await (const chunk of result) {
-                if (!isFirstChunk) {
-                    isFirstChunk = true;
-                    addMessage({ content: chunk, role: "assistant" });
+                if (isFirstChunk) {
+                    isFirstChunk = false;
+                    addMessage({ content: "", role: "assistant" });
                     setIsLoading(false);
                     setIsStreaming(true);
                 }
@@ -73,7 +73,10 @@ const App = () => {
             <div className={styles.ChatContainer}>
                 <Chat messages={messages} />
             </div>
-            <Controls onSend={handleContentSend} isDisabled={isLoading || isStreaming} />
+            <Controls
+                onSend={handleContentSend}
+                isDisabled={isLoading || isStreaming}
+            />
         </div>
     );
 };
