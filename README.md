@@ -163,15 +163,19 @@ Each assistant supports custom model selection:
 This project includes two automated workflows:
 
 ### CI/CD Pipeline (`ci.yml`)
+
 Runs on every push and pull request to `main` and `develop` branches:
-- ✅ Lints code with ESLint
-- 🔨 Builds the project
-- 📦 Uploads build artifacts
+
+-   ✅ Lints code with ESLint
+-   🔨 Builds the project
+-   📦 Uploads build artifacts
 
 ### Deploy to GitHub Pages (`deploy.yml`)
+
 Automatically deploys to GitHub Pages on push to `main`:
-- 🔨 Builds the project with production settings
-- 🌐 Deploys to GitHub Pages
+
+-   🔨 Builds the project with production settings
+-   🌐 Deploys to GitHub Pages
 
 ### Setting up GitHub Secrets
 
@@ -179,9 +183,9 @@ For deployment to work, add your API keys as repository secrets:
 
 1. Go to your repository → Settings → Secrets and variables → Actions
 2. Add the following secrets:
-   - `VITE_GOOGLE_AI_API_KEY`
-   - `VITE_OPEN_AI_API_KEY`
-   - `VITE_DEEPSEEK_API_KEY`
+    - `VITE_GOOGLE_AI_API_KEY`
+    - `VITE_OPEN_AI_API_KEY`
+    - `VITE_DEEPSEEK_API_KEY`
 
 ### Enabling GitHub Pages
 
