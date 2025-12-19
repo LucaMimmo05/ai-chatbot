@@ -1,33 +1,33 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-const googleAI = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_AI_API_KEY);
+const googleAI = new GoogleGenAI({
+    apiKey: import.meta.env.VITE_GOOGLE_AI_API_KEY,
+});
 
 export class Assistant {
     #chat;
     constructor(model = "gemini-2.5-flash") {
-        const gemini = googleAI.getGenerativeModel({
-            model,
-        });
-        this.#chat = gemini.startChat({ history: [] });
+        this.#chat = googleAI.chats.create({model});
+        
     }
 
     chat = async (content) => {
         try {
-            const result = await this.#chat.sendMessage(content);
-            return result.response.text();
+            const result = await this.#chat.sendMessage({message: content});
+            return result.text;
         } catch (error) {
             console.log(error);
         }
     };
 
-    async *chatStream (content) {
+    async *chatStream(content) {
         try {
-            const result = await this.#chat.sendMessageStream(content);
-            for await (const chunk of result.stream) {
-                yield chunk.text();
+            const result = await this.#chat.sendMessageStream({message: content});
+            for await (const chunk of result) {
+                yield chunk.text;
             }
         } catch (error) {
             console.log(error);
         }
-    };
+    }
 }
