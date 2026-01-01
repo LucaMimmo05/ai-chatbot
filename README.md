@@ -1,7 +1,5 @@
 # 🤖 AI Chatbot
 
-[![CI/CD Pipeline](https://github.com/LucaMimmo05/ai-chatbot/actions/workflows/ci.yml/badge.svg)](https://github.com/LucaMimmo05/ai-chatbot/actions/workflows/ci.yml)
-[![Deploy to GitHub Pages](https://github.com/LucaMimmo05/ai-chatbot/actions/workflows/deploy.yml/badge.svg)](https://github.com/LucaMimmo05/ai-chatbot/actions/workflows/deploy.yml)
 
 A modern, interactive chatbot application built with React and Vite, featuring multiple AI assistant integrations with real-time streaming responses.
 
